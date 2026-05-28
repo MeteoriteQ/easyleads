@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EasyLeads CRM Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #07040d;
+      --bg-soft: #100817;
+      --bg-card: #15101f;
+      --bg-card-2: #1c1229;
+      --violet: #8b2be8;
+      --violet-soft: #b06aee;
+      --blue: #2f73d8;
+      --green: #27bd72;
+      --orange: #f8a83a;
+      --red: #ef5c4d;
+      --white: #ffffff;
+      --text: #f7f2ff;
+      --muted: #b9adc7;
+      --line: rgba(255,255,255,0.11);
+      --shadow: 0 24px 70px rgba(0,0,0,0.38);
+      --nav: rgba(7,4,13,0.88);
+      --surface: linear-gradient(180deg, color-mix(in srgb, var(--bg-card) 92%, var(--violet) 8%), var(--bg-card));
+    }
+
+    body.light-mode {
+      --bg: #ffffff;
+      --bg-soft: #f5f7fc;
+      --bg-card: #ffffff;
+      --bg-card-2: #f9fbff;
+      --violet: #7200b0;
+      --violet-soft: #7200b0;
+      --white: #15121a;
+      --text: #1d1725;
+      --muted: #666666;
+      --line: rgba(0,0,0,0.08);
+      --shadow: 0 14px 35px rgba(31,45,74,0.1);
+      --nav: rgba(255,255,255,0.96);
+      --surface: #ffffff;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "Montserrat", sans-serif;
+      background:
+        radial-gradient(circle at 82% 12%, rgba(139,43,232,0.18), transparent 28%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    body.light-mode {
+      background: linear-gradient(180deg, #f7f9ff 0%, #edf2fa 100%);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+
+    .app-shell {
+      display: grid;
+      grid-template-columns: 270px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 1.15rem;
+      background: var(--nav);
+      backdrop-filter: blur(18px);
+      border-right: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      z-index: 20;
+    }
+
+    .brand {
+      height: 4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      color: var(--white);
+      font-size: 1.2rem;
+      font-weight: 900;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 0.75rem;
+      background: var(--white);
+      color: var(--violet);
+      display: grid;
+      place-items: center;
+      box-shadow: var(--shadow);
+    }
+
+    body.light-mode .brand-mark { background: var(--violet); color: #fff; }
+
+    .nav-menu {
+      display: grid;
+      gap: 0.45rem;
+    }
+
+    .nav-item {
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--muted);
+      min-height: 46px;
+      padding: 0 0.85rem;
+      border-radius: 0.65rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 800;
+      text-align: left;
+      transition: 0.2s ease;
+    }
+
+    .nav-item i {
+      width: 22px;
+      color: var(--violet-soft);
+      text-align: center;
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+      background: color-mix(in srgb, var(--violet) 16%, transparent);
+      border-color: color-mix(in srgb, var(--violet-soft) 45%, transparent);
+      color: var(--white);
+    }
+
+    .sidebar-card {
+      margin-top: auto;
+      border: 1px solid var(--line);
+      border-radius: 0.85rem;
+      background: var(--surface);
+      padding: 1rem;
+      box-shadow: var(--shadow);
+    }
+
+    .sidebar-card p {
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.55;
+      margin: 0.45rem 0 0.9rem;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 15;
+      min-height: 4.6rem;
+      padding: 0.85rem 1.5rem;
+      background: var(--nav);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 0.65rem;
+      background: var(--bg-card);
+      color: var(--white);
+    }
+
+    .page-title { flex: 1; min-width: 0; }
+    .page-title p {
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+      margin-bottom: 0.18rem;
+    }
+
+    .page-title h1 {
+      color: var(--white);
+      font-size: clamp(1.3rem, 2.2vw, 2rem);
+      line-height: 1.15;
+    }
+
+    .search {
+      width: min(340px, 32vw);
+      height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 0.65rem;
+      background: var(--bg-card);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0 0.9rem;
+    }
+
+    .search input {
+      width: 100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--text);
+      min-width: 0;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .icon-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 0.65rem;
+      border: 1px solid var(--line);
+      background: var(--bg-card);
+      color: var(--white);
+      display: grid;
+      place-items: center;
+      position: relative;
+      transition: 0.2s ease;
+    }
+
+    .icon-btn:hover { transform: translateY(-2px); border-color: var(--violet-soft); }
+
+    .badge {
+      position: absolute;
+      top: -6px;
+      right: -5px;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 99px;
+      background: var(--red);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 0.65rem;
+      font-weight: 900;
+    }
+
+    .user-chip {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding-left: 0.35rem;
+      min-width: 185px;
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 0.6rem;
+      object-fit: cover;
+      background: var(--bg-card-2);
+      border: 1px solid var(--line);
+    }
+
+    .user-chip strong { display: block; color: var(--white); font-size: 0.9rem; }
+    .user-chip span { color: var(--muted); font-size: 0.74rem; font-weight: 700; }
+
+    .content {
+      padding: 1.5rem;
+      min-width: 0;
+    }
+
+    .page {
+      display: none;
+      animation: fadeUp 0.28s ease;
+    }
+
+    .page.active { display: block; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.3rem;
+    }
+
+    .metric-card,
+    .panel,
+    .table-card,
+    .profile-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 0.8rem;
+      box-shadow: var(--shadow);
+    }
+
+    .metric-card {
+      min-height: 106px;
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      padding: 1.05rem;
+    }
+
+    .metric-icon,
+    .item-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 0.65rem;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      flex: 0 0 auto;
+    }
+
+    .metric-card h3 {
+      color: var(--white);
+      font-size: clamp(1.45rem, 2vw, 2rem);
+      line-height: 1;
+      margin-top: 0.4rem;
+    }
+
+    .metric-card p,
+    .muted {
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 600;
+      line-height: 1.45;
+    }
+
+    .metric-card h4,
+    .panel h3,
+    .table-card h3,
+    .profile-card h3 {
+      color: var(--white);
+      font-size: 1rem;
+      line-height: 1.25;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 0.65rem;
+      padding: 0.82rem 1rem;
+      color: #fff;
+      background: var(--violet);
+      font-weight: 900;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      transition: 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+    .btn.secondary {
+      background: var(--bg-card);
+      color: var(--white);
+      border: 1px solid var(--line);
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1.05fr 1fr;
+      gap: 1.3rem;
+      align-items: start;
+    }
+
+    .column { display: grid; gap: 1.3rem; min-width: 0; }
+
+    .panel {
+      overflow: hidden;
+    }
+
+    .panel-head {
+      min-height: 52px;
+      padding: 0 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      background: color-mix(in srgb, var(--violet) 18%, transparent);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel-head.blue { background: linear-gradient(135deg, #1c3767, var(--blue)); color: #fff; }
+    body.light-mode .panel-head.blue { color: #fff; }
+
+    .panel-body { padding: 1rem; }
+
+    .list {
+      display: grid;
+    }
+
+    .list-item {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      min-height: 58px;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .list-item:last-child { border-bottom: none; }
+    .list-item .grow { flex: 1; min-width: 0; }
+    .list-item strong { color: var(--white); font-size: 0.92rem; }
+    .list-item span { color: var(--muted); font-size: 0.8rem; line-height: 1.45; }
+    .chev { color: var(--muted); }
+
+    .person {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid var(--line);
+    }
+
+    .hub-card {
+      background: linear-gradient(135deg, #183866, #182643 70%);
+      color: #fff;
+      border-radius: 0.75rem;
+      padding: 1rem;
+      box-shadow: var(--shadow);
+    }
+
+    .hub-title {
+      padding: 0.9rem 1rem;
+      border-radius: 0.55rem;
+      background: rgba(255,255,255,0.12);
+      font-size: 1.15rem;
+      font-weight: 900;
+      margin-bottom: 0.8rem;
+    }
+
+    .hub-row {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      padding: 0.8rem 0.2rem;
+      border-bottom: 1px solid rgba(255,255,255,0.22);
+      font-weight: 900;
+    }
+
+    .hub-row:last-child { border-bottom: none; }
+
+    .buyer-card {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.9rem;
+      align-items: start;
+    }
+
+    .buyer-card .detail {
+      grid-column: 1 / -1;
+      display: grid;
+      gap: 0.7rem;
+      padding-top: 0.8rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .mini-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-grid;
+      place-items: center;
+      color: #fff;
+      font-size: 0.55rem;
+      margin-right: 0.45rem;
+    }
+
+    .chart {
+      height: 155px;
+      display: flex;
+      align-items: end;
+      gap: 0.55rem;
+      padding: 0.8rem 0.4rem 0;
+      border-left: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      position: relative;
+    }
+
+    .chart::before,
+    .chart::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--line);
+    }
+
+    .chart::before { top: 34%; }
+    .chart::after { top: 64%; }
+
+    .bar {
+      flex: 1;
+      min-width: 16px;
+      border-radius: 0.35rem 0.35rem 0 0;
+      background: var(--blue);
+      z-index: 1;
+    }
+
+    .donut {
+      width: min(210px, 70vw);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      margin: 0.5rem auto 1rem;
+      background: conic-gradient(#815ced 0 42%, #23b889 42% 67%, #fa6b32 67% 82%, #ffc247 82% 100%);
+      position: relative;
+      box-shadow: inset 0 -14px 0 rgba(0,0,0,0.13);
+    }
+
+    .donut::after {
+      content: "";
+      position: absolute;
+      inset: 30%;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: 1px solid var(--line);
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      align-items: center;
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .legend i {
+      width: 10px;
+      height: 10px;
+      border-radius: 0.2rem;
+      display: inline-block;
+      margin-right: 0.3rem;
+    }
+
+    .page-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+
+    .table-card { overflow: hidden; }
+    .data-table { width: 100%; border-collapse: collapse; }
+    .data-table th,
+    .data-table td {
+      padding: 0.95rem;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      color: var(--text);
+      font-size: 0.84rem;
+      vertical-align: middle;
+    }
+
+    .data-table th {
+      background: color-mix(in srgb, var(--violet) 14%, transparent);
+      color: var(--white);
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .data-table tr:last-child td { border-bottom: none; }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      min-height: 25px;
+      border-radius: 999px;
+      padding: 0.18rem 0.6rem;
+      font-size: 0.72rem;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .status.hot { background: rgba(239,92,77,0.16); color: #ff7a6f; }
+    .status.warm { background: rgba(248,168,58,0.16); color: #ffb452; }
+    .status.active { background: rgba(39,189,114,0.16); color: #35d987; }
+    .status.info { background: rgba(47,115,216,0.16); color: #6aa4ff; }
+    .status.paused { background: color-mix(in srgb, var(--muted) 18%, transparent); color: var(--muted); }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 1.2rem;
+      align-items: start;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .property-card {
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 0.8rem;
+      box-shadow: var(--shadow);
+    }
+
+    .property-photo {
+      height: 155px;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .property-body { padding: 1rem; display: grid; gap: 0.7rem; }
+    .property-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+      flex-wrap: wrap;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .field {
+      display: grid;
+      gap: 0.45rem;
+    }
+
+    .field label {
+      color: var(--white);
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      min-height: 43px;
+      border: 1px solid var(--line);
+      border-radius: 0.6rem;
+      padding: 0.72rem 0.8rem;
+      background: var(--bg-card-2);
+      color: var(--text);
+      outline: none;
+    }
+
+    .field textarea { min-height: 110px; resize: vertical; }
+
+    .profile-hero {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .profile-avatar {
+      width: 86px;
+      height: 86px;
+      border-radius: 1rem;
+      object-fit: cover;
+      border: 1px solid var(--line);
+    }
+
+    .settings-list {
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .toggle-row {
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .toggle-row:last-child { border-bottom: none; }
+
+    .switch {
+      width: 48px;
+      height: 28px;
+      border-radius: 99px;
+      background: var(--violet);
+      padding: 3px;
+      display: flex;
+      justify-content: flex-end;
+      flex: 0 0 auto;
+    }
+
+    .switch span {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #fff;
+      display: block;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 0.9rem;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.75rem;
+      align-items: start;
+    }
+
+    .timeline-dot {
+      width: 34px;
+      height: 34px;
+      border-radius: 0.55rem;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      margin-top: 0.1rem;
+    }
+
+    .canvas-chart {
+      width: 100%;
+      min-height: 260px;
+      border-radius: 0.7rem;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 100% 25%,
+        var(--bg-card-2);
+      padding: 1rem;
+      display: flex;
+      align-items: end;
+      gap: 1rem;
+    }
+
+    .big-bar {
+      flex: 1;
+      border-radius: 0.5rem 0.5rem 0 0;
+      background: linear-gradient(180deg, var(--violet-soft), var(--blue));
+      min-height: 35px;
+      position: relative;
+    }
+
+    .big-bar span {
+      position: absolute;
+      left: 50%;
+      bottom: -1.7rem;
+      transform: translateX(-50%);
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 800;
+    }
+
+    @media (max-width: 1260px) {
+      .metric-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .dashboard-grid { grid-template-columns: 1fr 1fr; }
+      .dashboard-grid .column:last-child { grid-column: 1 / -1; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 980px) {
+      .app-shell { grid-template-columns: 1fr; }
+      .sidebar {
+        position: fixed;
+        left: 0;
+        transform: translateX(-100%);
+        width: min(300px, 86vw);
+        transition: transform 0.25s ease;
+      }
+      .sidebar.open { transform: translateX(0); }
+      .mobile-menu-btn { display: grid; place-items: center; }
+      .search { display: none; }
+      .grid-2,
+      .profile-hero { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 740px) {
+      .topbar { padding: 0.75rem 1rem; }
+      .content { padding: 1rem; }
+      .user-chip { display: none; }
+      .metric-grid,
+      .dashboard-grid,
+      .dashboard-grid .column:last-child,
+      .grid-3,
+      .form-grid { grid-template-columns: 1fr; }
+      .data-table { min-width: 760px; }
+      .table-scroll { overflow-x: auto; }
+      .page-toolbar { align-items: stretch; }
+      .toolbar-actions,
+      .btn { width: 100%; }
+      .toolbar-actions .btn { flex: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="index.html" aria-label="EasyLeads home">
+        <span class="brand-mark"><i class="fa-solid fa-house-chimney"></i></span>
+        <span>EasyLeads CRM</span>
+      </a>
+
+      <nav class="nav-menu" aria-label="Dashboard pages">
+        <button class="nav-item active" data-page="dashboard"><i class="fa-solid fa-table-cells-large"></i><span>Dashboard</span></button>
+        <button class="nav-item" data-page="leads"><i class="fa-solid fa-users"></i><span>Leads</span></button>
+        <button class="nav-item" data-page="properties"><i class="fa-solid fa-building"></i><span>Properties</span></button>
+        <button class="nav-item" data-page="campaigns"><i class="fa-solid fa-envelope-open-text"></i><span>Email Campaigns</span></button>
+        <button class="nav-item" data-page="analytics"><i class="fa-solid fa-chart-line"></i><span>Analytics</span></button>
+        <button class="nav-item" data-page="activity"><i class="fa-solid fa-bell"></i><span>Activity</span></button>
+        <button class="nav-item" data-page="profile"><i class="fa-solid fa-user"></i><span>User Profile</span></button>
+        <button class="nav-item" data-page="billing"><i class="fa-solid fa-credit-card"></i><span>Billing</span></button>
+        <button class="nav-item" data-page="settings"><i class="fa-solid fa-gear"></i><span>Settings</span></button>
+      </nav>
+
+      <div class="sidebar-card">
+        <h3>Premium Plan</h3>
+        <p>Unlimited buyer profiles, automated WhatsApp and email follow-ups, and priority support.</p>
+        <button class="btn" data-page-link="billing"><i class="fa-solid fa-arrow-up-right-dots"></i> Manage Plan</button>
+      </div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <button class="mobile-menu-btn" id="mobileMenu" aria-label="Open menu"><i class="fa-solid fa-bars"></i></button>
+        <div class="page-title">
+          <p id="pageEyebrow">Real Estate CRM</p>
+          <h1 id="pageHeading">Dashboard</h1>
+        </div>
+        <label class="search" aria-label="Search dashboard">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="search" placeholder="Search leads, properties, campaigns..." />
+        </label>
+        <div class="top-actions">
+          <button class="icon-btn theme-toggle" aria-label="Switch theme"><i class="fa-solid fa-sun"></i></button>
+          <button class="icon-btn" aria-label="Notifications"><i class="fa-solid fa-bell"></i><span class="badge">3</span></button>
+          <button class="icon-btn" aria-label="Apps"><i class="fa-solid fa-grip"></i></button>
+        </div>
+        <button class="user-chip nav-item" data-page="profile">
+          <img class="avatar" src="photos/client2.webp" alt="John Smith">
+          <span><strong>John Smith</strong><span>Premium Member</span></span>
+        </button>
+      </header>
+
+      <div class="content">
+        <section class="page active" id="page-dashboard" data-title="Dashboard" data-eyebrow="Real Estate CRM">
+          <div class="metric-grid">
+            <article class="metric-card"><div class="metric-icon" style="background:var(--orange)"><i class="fa-solid fa-users"></i></div><div><h4>Total Leads</h4><h3>1,250</h3><p>Bulk leads imported</p></div></article>
+            <article class="metric-card"><div class="metric-icon" style="background:#39916f"><i class="fa-solid fa-turn-up"></i></div><div><h4>High Priority Leads</h4><h3>178</h3><p>Need follow-up today</p></div></article>
+            <article class="metric-card"><div class="metric-icon" style="background:#75a9f2"><i class="fa-solid fa-inbox"></i></div><div><h4>Website Inquiries</h4><h3>85</h3><p>New this week</p></div></article>
+            <article class="metric-card"><div class="metric-icon" style="background:var(--green)"><i class="fa-solid fa-message"></i></div><div><h4>Automated Messages</h4><h3>320</h3><p>WhatsApp / email sent</p></div></article>
+            <article class="metric-card"><button class="btn" data-page-link="billing"><i class="fa-solid fa-crown"></i> Manage Plan</button></article>
+          </div>
+
+          <div class="dashboard-grid">
+            <div class="column">
+              <article class="panel">
+                <div class="panel-head"><h3>Lead Prioritization</h3></div>
+                <div class="panel-body list">
+                  <div class="list-item"><div class="item-icon" style="background:#5e9fc1"><i class="fa-solid fa-building"></i></div><div class="grow"><strong>Lakeview Apartments</strong></div><i class="fa-solid fa-chevron-right chev"></i></div>
+                  <div class="list-item"><div class="item-icon" style="background:#5a82e2"><i class="fa-solid fa-chart-simple"></i></div><div class="grow"><strong>42</strong> <span>High-intent leads</span></div><i class="fa-solid fa-chevron-right chev"></i></div>
+                  <div class="list-item"><div class="item-icon" style="background:#74a567"><i class="fa-solid fa-envelope"></i></div><div class="grow"><strong>28</strong> <span>Active prospects</span></div><i class="fa-solid fa-chevron-right chev"></i></div>
+                  <div class="list-item"><div class="item-icon" style="background:#ef5c4d"><i class="fa-solid fa-heart"></i></div><div class="grow"><strong>15</strong> <span>Interested buyers</span></div><i class="fa-solid fa-chevron-right chev"></i></div>
+                </div>
+              </article>
+
+              <article class="panel">
+                <div class="panel-head blue"><h3>Website Inquiries</h3></div>
+                <div class="panel-body list">
+                  <div class="list-item"><img class="person" src="photos/client2.webp" alt=""><div><strong>Michael R.</strong><br><span>Viewed Lakeview Apartments</span></div></div>
+                  <div class="list-item"><img class="person" src="photos/client1.webp" alt=""><div><strong>Anita K.</strong><br><span>Interested in Elite Residences</span></div></div>
+                  <div class="list-item"><img class="person" src="photos/client3.webp" alt=""><div><strong>Jason T.</strong><br><span>Downloaded brochure</span></div></div>
+                </div>
+              </article>
+
+              <article class="panel">
+                <div class="panel-body list-item">
+                  <div class="item-icon" style="background:var(--blue)"><i class="fa-solid fa-credit-card"></i></div>
+                  <div><strong>Premium Plan</strong><br><span>Next billing: Jan 25, 2027</span></div>
+                </div>
+              </article>
+            </div>
+
+            <div class="column">
+              <article class="panel">
+                <div class="panel-head"><h3>Relevant Buy Leads</h3></div>
+                <div class="panel-body list">
+                  <div class="list-item"><img class="person" src="photos/client1.webp" alt=""><div><strong>Sarah Mitchell</strong><br><span>3 BHK Apartment | $250K</span></div></div>
+                  <div class="list-item"><img class="person" src="photos/client2.webp" alt=""><div><strong>Raj Malhotra</strong><br><span>Luxury Villa | $500K</span></div></div>
+                  <div class="list-item"><img class="person" src="photos/client3.webp" alt=""><div><strong>Emily Catter</strong><br><span>Commercial Space | $750K</span></div></div>
+                </div>
+              </article>
+
+              <article class="hub-card">
+                <div class="hub-title">Communication Hub</div>
+                <div class="hub-row"><div class="item-icon" style="background:var(--green)"><i class="fa-brands fa-whatsapp"></i></div>12 New Replies</div>
+                <div class="hub-row"><div class="item-icon" style="background:var(--orange)"><i class="fa-solid fa-envelope"></i></div>8 New Responses</div>
+              </article>
+
+              <article class="panel">
+                <div class="panel-body buyer-card">
+                  <img class="person" src="photos/client2.webp" alt="">
+                  <div><h3>Buyer Profile</h3><p class="muted">Verified Buyer</p></div>
+                  <div class="detail">
+                    <p><span class="mini-dot" style="background:#72a9ff"></span>Budget: <strong>$400K - $600K</strong></p>
+                    <p><span class="mini-dot" style="background:#ff9d36"></span>Looking for: <strong>3 BHK Apartment</strong></p>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <div class="column">
+              <article class="panel">
+                <div class="panel-head blue"><h3>My Real Estate Projects</h3></div>
+                <div class="panel-body list">
+                  <div class="list-item"><div class="item-icon" style="background:#4889d9"><i class="fa-regular fa-file-lines"></i></div><strong class="grow">Sunset Heights</strong><i class="fa-solid fa-chevron-right chev"></i></div>
+                  <div class="list-item"><div class="item-icon" style="background:#5e9fc1"><i class="fa-regular fa-file-lines"></i></div><strong class="grow">Downtown Plaza</strong><i class="fa-solid fa-chevron-right chev"></i></div>
+                  <div class="list-item"><div class="item-icon" style="background:#4889d9"><i class="fa-regular fa-file-lines"></i></div><strong class="grow">Riverside Enclave</strong><i class="fa-solid fa-chevron-right chev"></i></div>
+                </div>
+              </article>
+
+              <article class="panel">
+                <div class="panel-head"><h3>Communication Hub</h3></div>
+                <div class="panel-body list">
+                  <div class="list-item"><div class="item-icon" style="background:var(--green)"><i class="fa-brands fa-whatsapp"></i></div><div class="grow"><strong>WhatsApp Messages</strong><br><span>12 new replies</span></div><i class="fa-solid fa-chevron-right chev"></i></div>
+                  <div class="list-item"><div class="item-icon" style="background:var(--blue)"><i class="fa-solid fa-envelope"></i></div><div class="grow"><strong>Email Campaigns</strong><br><span>8 new responses</span></div><i class="fa-solid fa-chevron-right chev"></i></div>
+                </div>
+              </article>
+
+              <article class="panel">
+                <div class="panel-head"><h3>Analytics Overview</h3></div>
+                <div class="panel-body">
+                  <h3>Leads & Conversions</h3>
+                  <div class="chart" aria-label="Leads and conversion chart">
+                    <div class="bar" style="height:30%;background:#6ea4f6"></div><div class="bar" style="height:36%;background:#33b6a0"></div><div class="bar" style="height:52%;background:#8ecf62"></div><div class="bar" style="height:34%;background:#ff8840"></div><div class="bar" style="height:60%;background:#ff7145"></div><div class="bar" style="height:45%;background:#76a8ef"></div><div class="bar" style="height:78%;background:#3272c9"></div>
+                  </div>
+                  <h3 style="margin-top:1rem;">Lead Sources</h3>
+                  <div class="donut" aria-label="Lead sources chart"></div>
+                  <div class="legend"><span><i style="background:#815ced"></i>Website</span><span><i style="background:#23b889"></i>Ads</span><span><i style="background:#fa6b32"></i>Referrals</span><span><i style="background:#ffc247"></i>Portals</span></div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" id="page-leads" data-title="Leads" data-eyebrow="Pipeline Management">
+          <div class="page-toolbar"><div><h2>Lead Inbox</h2><p class="muted">Score, assign, and follow up with every buyer from one list.</p></div><div class="toolbar-actions"><button class="btn secondary"><i class="fa-solid fa-filter"></i> Filter</button><button class="btn"><i class="fa-solid fa-plus"></i> Add Lead</button></div></div>
+          <div class="metric-grid">
+            <article class="metric-card"><div class="metric-icon" style="background:var(--red)"><i class="fa-solid fa-fire"></i></div><div><h4>Hot Leads</h4><h3>48</h3><p>Ready for sales calls</p></div></article>
+            <article class="metric-card"><div class="metric-icon" style="background:var(--orange)"><i class="fa-solid fa-clock"></i></div><div><h4>Follow-ups</h4><h3>126</h3><p>Due this week</p></div></article>
+            <article class="metric-card"><div class="metric-icon" style="background:var(--green)"><i class="fa-solid fa-calendar-check"></i></div><div><h4>Site Visits</h4><h3>32</h3><p>Scheduled visits</p></div></article>
+          </div>
+          <article class="table-card table-scroll">
+            <table class="data-table">
+              <thead><tr><th>Lead</th><th>Requirement</th><th>Source</th><th>Budget</th><th>Owner</th><th>Status</th><th>Next Action</th></tr></thead>
+              <tbody>
+                <tr><td>Sarah Mitchell</td><td>3 BHK Apartment</td><td>Website</td><td>$250K</td><td>Anita</td><td><span class="status hot">Hot</span></td><td>Call today</td></tr>
+                <tr><td>Raj Malhotra</td><td>Luxury Villa</td><td>Meta Ads</td><td>$500K</td><td>Rohit</td><td><span class="status warm">Warm</span></td><td>Share brochure</td></tr>
+                <tr><td>Emily Catter</td><td>Commercial Space</td><td>99acres</td><td>$750K</td><td>Neha</td><td><span class="status active">Visit Booked</span></td><td>Confirm slot</td></tr>
+                <tr><td>Michael R.</td><td>Lakeview Apartments</td><td>Website</td><td>$320K</td><td>Amit</td><td><span class="status info">New</span></td><td>Qualify lead</td></tr>
+              </tbody>
+            </table>
+          </article>
+        </section>
+
+        <section class="page" id="page-properties" data-title="Properties" data-eyebrow="Inventory">
+          <div class="page-toolbar"><div><h2>Property Listings</h2><p class="muted">Manage live projects, units, pricing, and buyer interest.</p></div><div class="toolbar-actions"><button class="btn secondary"><i class="fa-solid fa-map-location-dot"></i> Map View</button><button class="btn"><i class="fa-solid fa-building-circle-arrow-right"></i> Add Property</button></div></div>
+          <div class="grid-3">
+            <article class="property-card"><div class="property-photo" style="background-image:url('photos/one.jpg')"></div><div class="property-body"><h3>Lakeview Apartments</h3><p class="muted">3 BHK apartments near waterfront business district.</p><div class="property-meta"><span>$250K - $420K</span><span>42 leads</span></div><span class="status active">Active</span></div></article>
+            <article class="property-card"><div class="property-photo" style="background-image:url('photos/five.webp')"></div><div class="property-body"><h3>Sunset Heights</h3><p class="muted">Premium towers with club amenities and city views.</p><div class="property-meta"><span>$380K - $650K</span><span>29 leads</span></div><span class="status hot">High Demand</span></div></article>
+            <article class="property-card"><div class="property-photo" style="background-image:url('photos/ten.avif')"></div><div class="property-body"><h3>Downtown Plaza</h3><p class="muted">Commercial spaces for retail and office buyers.</p><div class="property-meta"><span>$500K - $900K</span><span>18 leads</span></div><span class="status info">New Launch</span></div></article>
+          </div>
+          <article class="table-card table-scroll">
+            <table class="data-table">
+              <thead><tr><th>Project</th><th>Type</th><th>Available Units</th><th>Avg. Price</th><th>Lead Match</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>Riverside Enclave</td><td>Residential</td><td>36</td><td>$410K</td><td>22 buyers</td><td><span class="status active">Selling</span></td></tr>
+                <tr><td>Elite Residences</td><td>Residential</td><td>19</td><td>$620K</td><td>14 buyers</td><td><span class="status warm">Limited</span></td></tr>
+                <tr><td>Metro Business Hub</td><td>Commercial</td><td>12</td><td>$780K</td><td>9 buyers</td><td><span class="status info">Review</span></td></tr>
+              </tbody>
+            </table>
+          </article>
+        </section>
+
+        <section class="page" id="page-campaigns" data-title="Email Campaigns" data-eyebrow="Marketing Automation">
+          <div class="grid-2">
+            <article class="panel">
+              <div class="panel-head"><h3>Campaign Builder</h3><button class="btn"><i class="fa-solid fa-paper-plane"></i> Send</button></div>
+              <div class="panel-body form-grid">
+                <div class="field"><label>Campaign Name</label><input value="Lakeview Apartments Launch"></div>
+                <div class="field"><label>Audience</label><select><option>Hot residential buyers</option><option>Commercial prospects</option></select></div>
+                <div class="field"><label>Subject</label><input value="New 3 BHK homes matched to your budget"></div>
+                <div class="field"><label>Schedule</label><input value="Tomorrow, 10:00 AM"></div>
+                <div class="field" style="grid-column:1/-1"><label>Message</label><textarea>Hi {{name}}, we found homes that match your budget and preferred location. Would you like to schedule a visit this week?</textarea></div>
+              </div>
+            </article>
+            <article class="panel">
+              <div class="panel-head"><h3>Campaign Performance</h3></div>
+              <div class="panel-body list">
+                <div class="list-item"><div class="item-icon" style="background:var(--green)"><i class="fa-solid fa-envelope-open"></i></div><div><strong>42.8% Open Rate</strong><br><span>Up 8.5% from last campaign</span></div></div>
+                <div class="list-item"><div class="item-icon" style="background:var(--blue)"><i class="fa-solid fa-arrow-pointer"></i></div><div><strong>18.4% Click Rate</strong><br><span>Brochure download is the top link</span></div></div>
+                <div class="list-item"><div class="item-icon" style="background:var(--orange)"><i class="fa-solid fa-reply"></i></div><div><strong>8 New Responses</strong><br><span>Route replies to assigned agents</span></div></div>
+              </div>
+            </article>
+          </div>
+          <article class="table-card table-scroll" style="margin-top:1.2rem">
+            <table class="data-table">
+              <thead><tr><th>Campaign</th><th>Audience</th><th>Sent</th><th>Open</th><th>Replies</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>Lakeview Launch</td><td>Hot buyers</td><td>1,450</td><td>42.8%</td><td>31</td><td><span class="status active">Running</span></td></tr>
+                <tr><td>Villa Weekend Visits</td><td>Premium buyers</td><td>620</td><td>39.2%</td><td>14</td><td><span class="status info">Scheduled</span></td></tr>
+                <tr><td>Commercial Spaces</td><td>Investors</td><td>910</td><td>34.5%</td><td>12</td><td><span class="status paused">Draft</span></td></tr>
+              </tbody>
+            </table>
+          </article>
+        </section>
+
+        <section class="page" id="page-analytics" data-title="Analytics" data-eyebrow="Performance Insights">
+          <div class="metric-grid">
+            <article class="metric-card"><div class="metric-icon" style="background:var(--blue)"><i class="fa-solid fa-chart-line"></i></div><div><h4>Conversion Rate</h4><h3>24.6%</h3><p>Lead to site visit</p></div></article>
+            <article class="metric-card"><div class="metric-icon" style="background:var(--green)"><i class="fa-solid fa-handshake"></i></div><div><h4>Deals Won</h4><h3>18</h3><p>This month</p></div></article>
+            <article class="metric-card"><div class="metric-icon" style="background:var(--orange)"><i class="fa-solid fa-indian-rupee-sign"></i></div><div><h4>Pipeline Value</h4><h3>$8.4M</h3><p>Open opportunities</p></div></article>
+          </div>
+          <div class="grid-2">
+            <article class="panel">
+              <div class="panel-head"><h3>Monthly Lead Growth</h3></div>
+              <div class="panel-body"><div class="canvas-chart"><div class="big-bar" style="height:42%"><span>Jan</span></div><div class="big-bar" style="height:56%"><span>Feb</span></div><div class="big-bar" style="height:48%"><span>Mar</span></div><div class="big-bar" style="height:75%"><span>Apr</span></div><div class="big-bar" style="height:86%"><span>May</span></div><div class="big-bar" style="height:68%"><span>Jun</span></div></div></div>
+            </article>
+            <article class="panel">
+              <div class="panel-head"><h3>Source Breakdown</h3></div>
+              <div class="panel-body"><div class="donut"></div><div class="legend"><span><i style="background:#815ced"></i>Website 42%</span><span><i style="background:#23b889"></i>Ads 25%</span><span><i style="background:#fa6b32"></i>Referrals 15%</span><span><i style="background:#ffc247"></i>Portals 18%</span></div></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="page" id="page-activity" data-title="Activity" data-eyebrow="Notifications">
+          <div class="grid-2">
+            <article class="panel"><div class="panel-head"><h3>Recent Activity</h3></div><div class="panel-body timeline">
+              <div class="timeline-item"><div class="timeline-dot" style="background:var(--orange)"><i class="fa-solid fa-arrow-right"></i></div><div><strong>Anna S. scheduled a property visit</strong><p class="muted">Lakeview Apartments, 10:30 AM tomorrow</p></div></div>
+              <div class="timeline-item"><div class="timeline-dot" style="background:var(--blue)"><i class="fa-solid fa-envelope"></i></div><div><strong>Email sent to Raj Malhotra</strong><p class="muted">Luxury villa brochure and price sheet</p></div></div>
+              <div class="timeline-item"><div class="timeline-dot" style="background:var(--green)"><i class="fa-brands fa-whatsapp"></i></div><div><strong>WhatsApp chat with Sarah M.</strong><p class="muted">Buyer asked for floor plan and parking details</p></div></div>
+            </div></article>
+            <article class="panel"><div class="panel-head"><h3>Tasks</h3></div><div class="panel-body list">
+              <div class="list-item"><div class="item-icon" style="background:#4169e1"><i class="fa-brands fa-facebook-f"></i></div><div class="grow"><strong>Review Facebook comments</strong><br><span>12 campaign questions waiting</span></div><i class="fa-solid fa-chevron-right chev"></i></div>
+              <div class="list-item"><div class="item-icon" style="background:var(--green)"><i class="fa-brands fa-whatsapp"></i></div><div class="grow"><strong>WhatsApp prospects</strong><br><span>5 hot leads need a reply</span></div><i class="fa-solid fa-chevron-right chev"></i></div>
+              <div class="list-item"><div class="item-icon" style="background:var(--red)"><i class="fa-solid fa-list-check"></i></div><div class="grow"><strong>Verify opinions</strong><br><span>Collect visit feedback</span></div><i class="fa-solid fa-chevron-right chev"></i></div>
+            </div></article>
+          </div>
+        </section>
+
+        <section class="page" id="page-profile" data-title="User Profile" data-eyebrow="Account">
+          <div class="grid-2">
+            <article class="profile-card panel-body">
+              <div class="profile-hero">
+                <img class="profile-avatar" src="photos/client2.webp" alt="John Smith">
+                <div><h2>John Smith</h2><p class="muted">Premium Member · Sales Director</p><p class="muted">john.smith@easyleads.in</p></div>
+                <button class="btn"><i class="fa-solid fa-pen"></i> Edit</button>
+              </div>
+            </article>
+            <article class="panel"><div class="panel-head"><h3>Profile Strength</h3></div><div class="panel-body list">
+              <div class="list-item"><div class="item-icon" style="background:var(--green)"><i class="fa-solid fa-check"></i></div><div><strong>Verified buyer network</strong><br><span>Profile is visible to team admins</span></div></div>
+              <div class="list-item"><div class="item-icon" style="background:var(--blue)"><i class="fa-solid fa-shield-halved"></i></div><div><strong>Two-step security enabled</strong><br><span>Last login today at 9:42 AM</span></div></div>
+            </div></article>
+          </div>
+          <article class="panel" style="margin-top:1.2rem"><div class="panel-head"><h3>Personal Details</h3></div><div class="panel-body form-grid">
+            <div class="field"><label>Full Name</label><input value="John Smith"></div><div class="field"><label>Role</label><input value="Sales Director"></div><div class="field"><label>Phone</label><input value="+1 555 0148"></div><div class="field"><label>Region</label><input value="California"></div>
+          </div></article>
+        </section>
+
+        <section class="page" id="page-billing" data-title="Billing" data-eyebrow="Subscription">
+          <div class="grid-2">
+            <article class="panel"><div class="panel-head"><h3>Premium Plan</h3><button class="btn"><i class="fa-solid fa-arrow-up-right-dots"></i> Upgrade</button></div><div class="panel-body">
+              <h2>$49 <span class="muted">/ month</span></h2><p class="muted" style="margin:0.5rem 0 1rem">Next billing date: Jan 25, 2027</p>
+              <div class="list"><div class="list-item"><i class="fa-solid fa-check" style="color:var(--green)"></i><strong>5,000 active leads</strong></div><div class="list-item"><i class="fa-solid fa-check" style="color:var(--green)"></i><strong>Marketing automation tools</strong></div><div class="list-item"><i class="fa-solid fa-check" style="color:var(--green)"></i><strong>Priority email and phone support</strong></div></div>
+            </div></article>
+            <article class="table-card table-scroll"><table class="data-table"><thead><tr><th>Invoice</th><th>Date</th><th>Amount</th><th>Status</th></tr></thead><tbody><tr><td>INV-2026-012</td><td>Dec 25, 2026</td><td>$49</td><td><span class="status active">Paid</span></td></tr><tr><td>INV-2026-011</td><td>Nov 25, 2026</td><td>$49</td><td><span class="status active">Paid</span></td></tr><tr><td>INV-2026-010</td><td>Oct 25, 2026</td><td>$49</td><td><span class="status active">Paid</span></td></tr></tbody></table></article>
+          </div>
+        </section>
+
+        <section class="page" id="page-settings" data-title="Settings" data-eyebrow="Workspace">
+          <div class="grid-2">
+            <article class="panel"><div class="panel-head"><h3>Automation Settings</h3></div><div class="panel-body settings-list">
+              <div class="toggle-row"><div><strong>Auto-assign new leads</strong><p class="muted">Route leads by project and agent availability.</p></div><div class="switch"><span></span></div></div>
+              <div class="toggle-row"><div><strong>WhatsApp follow-up reminders</strong><p class="muted">Notify agents when buyers do not respond.</p></div><div class="switch"><span></span></div></div>
+              <div class="toggle-row"><div><strong>Daily performance digest</strong><p class="muted">Send morning summary to admins.</p></div><div class="switch"><span></span></div></div>
+            </div></article>
+            <article class="panel"><div class="panel-head"><h3>Lead Capture Sources</h3></div><div class="panel-body form-grid">
+              <div class="field"><label>Website Forms</label><select><option>Connected</option></select></div><div class="field"><label>Meta Ads</label><select><option>Connected</option></select></div><div class="field"><label>Google Ads</label><select><option>Pending</option></select></div><div class="field"><label>Property Portals</label><select><option>Connected</option></select></div>
+            </div></article>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const themeToggle = document.querySelector(".theme-toggle");
+    const themeIcon = themeToggle.querySelector("i");
+
+    function setTheme(mode) {
+      document.body.classList.toggle("light-mode", mode === "light");
+      themeIcon.className = mode === "light" ? "fa-solid fa-moon" : "fa-solid fa-sun";
+      localStorage.setItem("easyleads-theme", mode);
+    }
+
+    setTheme(localStorage.getItem("easyleads-theme") || "dark");
+    themeToggle.addEventListener("click", () => setTheme(document.body.classList.contains("light-mode") ? "dark" : "light"));
+
+    const pages = document.querySelectorAll(".page");
+    const navItems = document.querySelectorAll("[data-page]");
+    const pageHeading = document.getElementById("pageHeading");
+    const pageEyebrow = document.getElementById("pageEyebrow");
+    const sidebar = document.getElementById("sidebar");
+    const mobileMenu = document.getElementById("mobileMenu");
+
+    function showPage(name) {
+      const page = document.getElementById(`page-${name}`);
+      if (!page) return;
+
+      pages.forEach(item => item.classList.remove("active"));
+      page.classList.add("active");
+
+      navItems.forEach(item => item.classList.toggle("active", item.dataset.page === name));
+      pageHeading.textContent = page.dataset.title || "Dashboard";
+      pageEyebrow.textContent = page.dataset.eyebrow || "Real Estate CRM";
+      sidebar.classList.remove("open");
+      history.replaceState(null, "", `#${name}`);
+    }
+
+    navItems.forEach(item => item.addEventListener("click", () => showPage(item.dataset.page)));
+    document.querySelectorAll("[data-page-link]").forEach(item => item.addEventListener("click", () => showPage(item.dataset.pageLink)));
+    mobileMenu.addEventListener("click", () => sidebar.classList.toggle("open"));
+
+    const initialPage = location.hash.replace("#", "") || "dashboard";
+    showPage(initialPage);
+  </script>
+</body>
+</html>
