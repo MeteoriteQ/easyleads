@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+
+
+    <style>
+
+        /* carousal */
+            .carousel-container {
+      position: relative;
+      width: 100%;
+      max-width: 800px;
+      margin: 50px auto;
+      overflow: hidden;
+    }
+
+    .carousel {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .card {
+      flex-shrink: 0;
+      width: 200px;
+      height: 280px;
+      margin: 0 10px;
+      border-radius: 10px;
+      background: #eee;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transition: transform 0.4s, opacity 0.4s;
+      opacity: 0.6;
+    }
+
+    .card img {
+      width: 80%;
+      height: auto;
+      margin-bottom: 10px;
+    }
+
+    .card.active {
+      transform: scale(1.2);
+      opacity: 1;
+      z-index: 2;
+    }
+
+
+    /* cards */
+
+    .cards-pos{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }    
+
+    .cards-background{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        width: 70%;
+    }
+
+    .card{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        border-radius: 1rem;
+        background-color: white;
+        box-shadow: 0px 0px 10px silver;
+        overflow: hidden;
+        width: 30%;
+        height: 12rem;
+        position: relative;
+        transition: all 0.3s ease-out;
+    }
+
+    
+    .card1{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        border-radius: 1rem;
+        background-color: white;
+        box-shadow: 0px 0px 10px silver;
+        overflow: hidden;
+        width: 60%;
+        height: 12rem;
+        position: relative;
+        transition: all 0.3s ease-out;
+    }
+
+      .card1:hover{
+        transform: scale(1.025);
+    }
+
+    .card1 img{
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+
+    .card:hover{
+        transform: scale(1.05);
+    }
+
+    .card img{
+        width: auto;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .card-info{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        position: absolute;
+        bottom: 0.5rem;
+        left: 0.5rem;
+        color: rgb(208, 208, 208);
+        font-family: 'font1', sans-serif;
+        font-size: 0.7rem;
+
+    }
+
+    .card-info h3 {
+        
+        margin: 0;
+    }
+
+    .arrow-explore{
+        color: rgb(208, 208, 208);
+        transform: rotate(-135deg);
+        font-weight: 100;
+        position: absolute;
+        right: 0.5rem;
+        top: 0.5rem;
+    }
+
+
+    /* plans */
+
+
+    .pricing-section {
+  background: #f9f9fb;
+  padding: 4rem 2rem;
+  text-align: center;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.pricing-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #4b0082;
+  margin-bottom: 3rem;
+}
+
+.pricing-cards {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.pricing-card {
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  padding: 2rem;
+  width: 300px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pricing-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+}
+
+.plan-name {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.plan-desc {
+  font-size: 0.95rem;
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.plan-price {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #4b0082;
+  margin-bottom: 1rem;
+}
+
+.plan-price span {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #777;
+}
+
+.plan-btn {
+  display: inline-block;
+  background: #4b0082;
+  color: #fff;
+  padding: 0.8rem 1.5rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.plan-btn:hover {
+  background: #6a0dad;
+}
+
+.plan-features {
+  list-style: none;
+  padding: 0;
+  margin-top: 1.5rem;
+  text-align: left;
+}
+
+.plan-features li {
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
+  color: #444;
+}
+
+/* Highlight Premium */
+.premium {
+  border: 2px solid #4b0082;
+  transform: scale(1.05);
+}
+
+
+    </style>
+</head>
+<body>
+
+
+<div class="cards-pos">
+<div class="cards-background">
+    
+    <div class="card">
+        <img src="three.jpg" alt="">
+        <div class="card-info">
+            <h3 class="card-heading">Data Analytics</h3>
+            <p class="card-content">Explore our data analytics fetures with integrated advanced crm and dashboard</p>
+        </div>
+        <a href="" class="arrow-explore"><i class="fa-solid fa-arrow-down"></i></a>
+    </div>
+
+     <div class="card1">
+        <img src="three.jpg" alt="">
+        <div class="card-info">
+            <h3 class="card-heading">Smart Automation</h3>
+            <p class="card-content">Automate lead asignments, follow ups and notifications</p>
+        </div>
+        <a href="" class="arrow-explore"><i class="fa-solid fa-arrow-down"></i></a>
+    </div>
+
+     <div class="card1">
+        <img src="three.jpg" alt="">
+        <div class="card-info">
+            <h3 class="card-heading">Smart Automation</h3>
+            <p class="card-content">Automate lead asignments, follow ups and notifications</p>
+        </div>
+        <a href="" class="arrow-explore"><i class="fa-solid fa-arrow-down"></i></a>
+    </div>
+
+    <div class="card">
+        <img src="three.jpg" alt="">
+        <div class="card-info">
+            <h3 class="card-heading">Data Analytics</h3>
+            <p class="card-content">Explore our data analytics fetures with integrated advanced crm and dashboard</p>
+        </div>
+        <a href="" class="arrow-explore"><i class="fa-solid fa-arrow-down"></i></a>
+    </div>    
+
+      <div class="card">
+        <img src="three.jpg" alt="">
+        <div class="card-info">
+            <h3 class="card-heading">Data Analytics</h3>
+            <p class="card-content">Explore our data analytics fetures with integrated advanced crm and dashboard</p>
+        </div>
+        <a href="" class="arrow-explore"><i class="fa-solid fa-arrow-down"></i></a>
+    </div>
+
+     <div class="card1">
+        <img src="three.jpg" alt="">
+        <div class="card-info">
+            <h3 class="card-heading">Smart Automation</h3>
+            <p class="card-content">Automate lead asignments, follow ups and notifications</p>
+        </div>
+        <a href="" class="arrow-explore"><i class="fa-solid fa-arrow-down"></i></a>
+    </div>
+
+</div>
+</div>
+
+
+<!-- carousal -->
+
+ <div class="carousel-container">
+    <div id="carousel" class="carousel">
+      <div class="card"><img src="https://via.placeholder.com/150"><p>LUXORA</p><p>$4,500</p></div>
+      <div class="card"><img src="https://via.placeholder.com/150"><p>GRANDEUR</p><p>$3,500</p></div>
+      <div class="card"><img src="https://via.placeholder.com/150"><p>PRESTIGIO</p><p>$2,200</p></div>
+      <div class="card"><img src="https://via.placeholder.com/150"><p>ELEGAN</p><p>$2,800</p></div>
+    </div>
+  </div>
+
+
+
+
+
+<!-- plans -->
+
+
+<section class="pricing-section">
+  <h2 class="pricing-title">Choose Your Plan</h2>
+
+  <div class="pricing-cards">
+
+    <!-- Basic Plan -->
+    <div class="pricing-card basic">
+      <h3 class="plan-name">Basic</h3>
+      <p class="plan-desc">Perfect for individual agents starting out.</p>
+      <p class="plan-price">$19<span>/month</span></p>
+      <a href="#" class="plan-btn">Get Started</a>
+      <ul class="plan-features">
+        <li>✔ Access up to 500 leads</li>
+        <li>✔ Basic CRM dashboard</li>
+        <li>✔ 2GB storage</li>
+        <li>✔ Email support</li>
+      </ul>
+    </div>
+
+    <!-- Premium Plan -->
+    <div class="pricing-card premium">
+      <h3 class="plan-name">Premium</h3>
+      <p class="plan-desc">Best for growing real estate teams.</p>
+      <p class="plan-price">$49<span>/month</span></p>
+      <a href="#" class="plan-btn">Get Started</a>
+      <ul class="plan-features">
+        <li>✔ Access up to 5,000 leads</li>
+        <li>✔ Advanced CRM with pipeline tracking</li>
+        <li>✔ 10GB storage</li>
+        <li>✔ Phone + Email support</li>
+        <li>✔ Marketing automation tools</li>
+      </ul>
+    </div>
+
+    <!-- Advanced Plan -->
+    <div class="pricing-card advanced">
+      <h3 class="plan-name">Advanced</h3>
+      <p class="plan-desc">For enterprises and large brokerages.</p>
+      <p class="plan-price">$99<span>/month</span></p>
+      <a href="#" class="plan-btn">Get Started</a>
+      <ul class="plan-features">
+        <li>✔ Unlimited leads access</li>
+        <li>✔ Full-featured CRM with team collaboration</li>
+        <li>✔ 50GB storage</li>
+        <li>✔ Priority support</li>
+        <li>✔ AI-driven lead scoring</li>
+        <li>✔ Custom integrations (API access)</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+
+
+
+
+
+
+
+    <script>
+
+
+
+const carousel = document.getElementById("carousel");
+    const cards = carousel.children;
+    const cardWidth = cards[0].offsetWidth + 20;
+    let index = 0;
+    let autoSlide;
+
+    function updateCarousel() {
+      carousel.style.transform = `translateX(${-index * cardWidth + (400 - cardWidth)/2}px)`;
+      [...cards].forEach((card, i) => {
+        card.classList.toggle("active", i === index);
+      });
+    }
+
+    function startAutoSlide() {
+      autoSlide = setInterval(() => {
+        index = (index + 1) % cards.length;
+        updateCarousel();
+      }, 3000);
+    }
+
+    function stopAutoSlide() {
+      clearInterval(autoSlide);
+    }
+
+    // Touch swipe
+    let startX = 0;
+    carousel.addEventListener("touchstart", e => {
+      stopAutoSlide();
+      startX = e.touches[0].clientX;
+    });
+
+    carousel.addEventListener("touchend", e => {
+      const endX = e.changedTouches[0].clientX;
+      if (endX < startX - 50) {
+        index = (index + 1) % cards.length;
+      } else if (endX > startX + 50) {
+        index = (index - 1 + cards.length) % cards.length;
+      }
+      updateCarousel();
+      startAutoSlide();
+    });
+
+    // Init
+    updateCarousel();
+    startAutoSlide();
+
+    </script>
+</body>
+</html>
